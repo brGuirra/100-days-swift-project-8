@@ -59,6 +59,7 @@ class ViewController: UIViewController {
         let submit = UIButton(type: .system)
         submit.translatesAutoresizingMaskIntoConstraints = false
         submit.setTitle("SUBMIT", for: .normal)
+        submit.addTarget(self, action: #selector(submitTapped), for: .touchUpInside)
         view.addSubview(submit)
         
         let clear = UIButton(type: .system)
@@ -199,6 +200,21 @@ class ViewController: UIViewController {
         }
         
         activatedButtons.removeAll()
+    }
+    
+    @objc func submitTapped(_ sender: UIButton) {
+        guard let answerText = currentAnswer.text else { return }
+        
+        if let solutionPosition = solutions.firstIndex(of: answerText) {
+            activatedButtons.removeAll()
+            
+            var splitedAnswers = answersLabel.text?.components(separatedBy: "\n")
+            splitedAnswers?[solutionPosition] = answerText
+            answersLabel.text = splitedAnswers?.joined(separator: "\n")
+            
+            currentAnswer.text = ""
+            score += 1
+        }
     }
 }
 
