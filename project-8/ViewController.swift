@@ -15,6 +15,7 @@ class ViewController: UIViewController {
     var letterButtons = [UIButton]()
     
     var activatedButtons = [UIButton]()
+    var solutions = [String]()
     
     var level = 1
     var score = 0
@@ -155,6 +156,7 @@ class ViewController: UIViewController {
                     // Create a hint containing the answer's amount of letters
                     let solutionWord = answer.replacingOccurrences(of: "|", with: "")
                     solutionString += "\(solutionWord.count) letters\n"
+                    solutions.append(solutionWord)
                     
                     // Split the answer in bits that will go in
                     // the buttons to user plays it
