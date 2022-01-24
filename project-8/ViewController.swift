@@ -18,7 +18,14 @@ class ViewController: UIViewController {
     var solutions = [String]()
     
     var level = 1
-    var score = 0
+    
+    // Set a observer to update scoreLabel
+    // text when the score property changes
+    var score = 0 {
+        didSet {
+            scoreLabel.text = "Score: \(score)"
+        }
+    }
     
     // Create UI elements and add constraints to each one
     override func loadView() {
