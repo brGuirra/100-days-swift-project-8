@@ -16,7 +16,8 @@ class ViewController: UIViewController {
     
     var level = 1
     var score = 0
-
+    
+    // Create UI elements and add constraints to each one
     override func loadView() {
         view = UIView()
         view.backgroundColor = .white
@@ -66,6 +67,7 @@ class ViewController: UIViewController {
         buttonsView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(buttonsView)
         
+        // An array with all active constraints
         NSLayoutConstraint.activate([
             scoreLabel.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor),
             scoreLabel.trailingAnchor.constraint(equalTo: view.layoutMarginsGuide.trailingAnchor),
@@ -99,6 +101,7 @@ class ViewController: UIViewController {
         ])
         
         
+        // Creats twenty buttons to receive bits of words
         let buttonWidth = 150
         let buttonHeight = 80
         
@@ -108,6 +111,8 @@ class ViewController: UIViewController {
                 letterButton.titleLabel?.font = UIFont.systemFont(ofSize: 36)
                 letterButton.setTitle("WWW", for: .normal)
                 
+                // The buttons are positioned by each other based
+                // on a index's multiplier of each row and column
                 let frame = CGRect(x: column * buttonWidth, y: row * buttonHeight, width: buttonWidth, height: buttonWidth)
                 letterButton.frame = frame
                 
@@ -130,27 +135,38 @@ class ViewController: UIViewController {
         
         if let levelFileURL = Bundle.main.url(forResource: "level\(level)", withExtension: "txt") {
             if let levelContents = try? String(contentsOf: levelFileURL) {
+                // Split the content of the file in lines and shuffle them
                 var lines = levelContents.components(separatedBy: "\n")
                 lines.shuffle()
                 
                 for (index, line) in lines.enumerated() {
+                    // The lines is splited in two parts, one contains
+                    // the answer and other the clue
                     let parts = line.components(separatedBy: ": ")
                     let answer = parts[0]
                     let clue = parts[1]
+                    
+                    // Create the clue string
                     clueString += "\(index + 1). \(clue)\n"
                     
+                    // Create a hint containing the answer's amount of letters
                     let solutionWord = answer.replacingOccurrences(of: "|", with: "")
                     solutionString += "\(solutionWord.count) letters\n"
                     
+                    // Split the answer in bits that will go in
+                    // the buttons to user plays it
                     let bits = answer.components(separatedBy: "|")
                     letterBits += bits
                 }
             }
         }
         
+        // Removes the line breaks of clue and answer
         cluesLabel.text = clueString.trimmingCharacters(in: .whitespacesAndNewlines)
         answersLabel.text = solutionString.trimmingCharacters(in: .whitespacesAndNewlines)
         
+        // Suffle the bits and sets each one as title of
+        // a button
         letterBits.shuffle()
         
         if letterButtons.count == letterBits.count {
