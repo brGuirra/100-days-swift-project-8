@@ -182,14 +182,14 @@ class ViewController: UIViewController {
         
         currentAnswer.text = currentAnswer.text?.appending(buttonTitle)
         activatedButtons.append(sender)
-        sender.isHidden = true
+        sender.isEnabled = false
     }
     
     @objc func clearTapped(_ sender: UIButton) {
         currentAnswer.text = ""
         
         for button in activatedButtons {
-            button.isHidden = false
+            button.isEnabled = true
         }
         
         activatedButtons.removeAll()
@@ -224,7 +224,7 @@ class ViewController: UIViewController {
         loadLevel()
         
         for button in letterButtons {
-            button.isHidden = false
+            button.isEnabled = true
         }
     }
     
