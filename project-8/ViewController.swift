@@ -63,21 +63,29 @@ class ViewController: UIViewController {
         currentAnswer.isUserInteractionEnabled = false
         view.addSubview(currentAnswer)
         
-        let submit = UIButton(type: .system)
+        let configuration = UIButton.Configuration.plain()
+        
+        let submit = UIButton(configuration: configuration, primaryAction: nil)
         submit.translatesAutoresizingMaskIntoConstraints = false
         submit.setTitle("SUBMIT", for: .normal)
+        submit.layer.borderWidth = 1
+        submit.layer.cornerRadius = 5
+        submit.layer.borderColor = UIColor.systemGray.cgColor
         submit.addTarget(self, action: #selector(submitTapped), for: .touchUpInside)
         view.addSubview(submit)
         
-        let clear = UIButton(type: .system)
+        let clear = UIButton(configuration: configuration, primaryAction: nil)
         clear.translatesAutoresizingMaskIntoConstraints = false
         clear.setTitle("CLEAR", for: .normal)
+        clear.layer.borderWidth = 1
+        clear.layer.cornerRadius = 5
+        clear.layer.borderColor = UIColor.systemGray.cgColor
         clear.addTarget(self, action: #selector(clearTapped), for: .touchUpInside)
         view.addSubview(clear)
         
-        let buttonsView = UIView()
-        buttonsView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(buttonsView)
+        let buttonsGrid = createButtonsGrid(rows: 4, columns: 5, spacing: 10.0)
+        buttonsGrid.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(buttonsGrid)
         
         // An array with all active constraints
         NSLayoutConstraint.activate([
@@ -105,34 +113,12 @@ class ViewController: UIViewController {
             clear.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 100),
             clear.heightAnchor.constraint(equalToConstant: 44),
             
-            buttonsView.widthAnchor.constraint(equalToConstant: 720),
-            buttonsView.heightAnchor.constraint(equalToConstant: 320),
-            buttonsView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            buttonsView.topAnchor.constraint(equalTo: submit.bottomAnchor, constant: 20),
-            buttonsView.bottomAnchor.constraint(equalTo: view.layoutMarginsGuide.bottomAnchor, constant: -40)
+            buttonsGrid.widthAnchor.constraint(equalToConstant: 720),
+            buttonsGrid.heightAnchor.constraint(equalToConstant: 320),
+            buttonsGrid.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            buttonsGrid.topAnchor.constraint(equalTo: submit.bottomAnchor, constant: 20),
+            buttonsGrid.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20)
         ])
-        
-        
-        // Creats twenty buttons to receive bits of words
-        let buttonWidth = 150
-        let buttonHeight = 80
-        
-        for row in 0..<4 {
-            for column in 0..<5 {
-                let letterButton = UIButton(type: .system)
-                letterButton.titleLabel?.font = UIFont.systemFont(ofSize: 36)
-                letterButton.setTitle("WWW", for: .normal)
-                letterButton.addTarget(self, action: #selector(letterTapped), for: .touchUpInside)
-                
-                // The buttons are positioned by each other based
-                // on a index's multiplier of each row and column
-                let frame = CGRect(x: column * buttonWidth, y: row * buttonHeight, width: buttonWidth, height: buttonWidth)
-                letterButton.frame = frame
-                
-                buttonsView.addSubview(letterButton)
-                letterButtons.append(letterButton)
-            }
-        }
     }
     
     override func viewDidLoad() {
@@ -240,6 +226,38 @@ class ViewController: UIViewController {
         for button in letterButtons {
             button.isHidden = false
         }
+    }
+    
+    func createButtonsGrid(rows: Int, columns: Int, spacing: CGFloat) -> UIStackView {
+        let verticalStack = UIStackView()
+        verticalStack.axis = .vertical
+        verticalStack.alignment = .fill
+        verticalStack.distribution = .fillEqually
+        verticalStack.spacing = 10
+        
+        for _ in 0..<rows {
+            let horizontalStack = UIStackView()
+            horizontalStack.axis = .horizontal
+            horizontalStack.distribution = .fillEqually
+            horizontalStack.alignment = .fill
+            horizontalStack.spacing = 10
+            
+            for _ in 0..<columns {
+                let letterButton = UIButton(type: .system)
+                letterButton.setTitle("WWW", for: .normal)
+                letterButton.layer.borderWidth = 1
+                letterButton.layer.cornerRadius = 5
+                letterButton.layer.borderColor = UIColor.gray.cgColor
+                letterButton.addTarget(self, action: #selector(letterTapped), for: .touchUpInside)
+                
+                horizontalStack.addArrangedSubview(letterButton)
+                letterButtons.append(letterButton)
+            }
+            
+            verticalStack.addArrangedSubview(horizontalStack)
+        }
+        
+        return verticalStack
     }
 }
 
