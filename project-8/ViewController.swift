@@ -18,6 +18,7 @@ class ViewController: UIViewController {
     var solutions = [String]()
     
     var level = 1
+    var wordsToGuess = 0
     
     // Set a observer to update scoreLabel
     // text when the score property changes
@@ -158,6 +159,8 @@ class ViewController: UIViewController {
                     let bits = answer.components(separatedBy: "|")
                     letterBits += bits
                 }
+                
+                wordsToGuess = solutions.count
             }
         }
         
@@ -201,14 +204,16 @@ class ViewController: UIViewController {
             
             currentAnswer.text = ""
             score += 1
+            wordsToGuess -= 1
             
             // Upgrades the level of the game
-            if score % 7 == 0 {
+            if wordsToGuess == 0 {
                 let ac = UIAlertController(title: "Well done!", message: "Are you ready for the next level?", preferredStyle: .alert)
                 ac.addAction(UIAlertAction(title: "Let's go!", style: .default, handler: levelUp))
                 present(ac, animated: true)
             }
         } else {
+            score -= 1
             let ac = UIAlertController(title: "Wrong!", message: "You answer isn't correct", preferredStyle: .alert)
             ac.addAction(UIAlertAction(title: "OK", style: .default) {
                 _ in
