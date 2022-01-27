@@ -186,16 +186,10 @@ class ViewController: UIViewController {
     }
     
     @objc func clearTapped(_ sender: UIButton) {
-        currentAnswer.text = ""
-        
-        for button in activatedButtons {
-            button.isEnabled = true
-        }
-        
-        activatedButtons.removeAll()
+        clearSelectedButtons()
     }
     
-    @objc func submitTapped(_ sender: UIButton) {
+    @objc func submitTapped(_ sender: UIButton?) {
         guard let answerText = currentAnswer.text else { return }
         
         if let solutionPosition = solutions.firstIndex(of: answerText) {
@@ -214,6 +208,13 @@ class ViewController: UIViewController {
                 ac.addAction(UIAlertAction(title: "Let's go!", style: .default, handler: levelUp))
                 present(ac, animated: true)
             }
+        } else {
+            let ac = UIAlertController(title: "Wrong!", message: "You answer isn't correct", preferredStyle: .alert)
+            ac.addAction(UIAlertAction(title: "OK", style: .default) {
+                _ in
+                self.clearSelectedButtons()
+            })
+            present(ac, animated: true)
         }
     }
     
@@ -258,6 +259,16 @@ class ViewController: UIViewController {
         }
         
         return verticalStack
+    }
+    
+    func clearSelectedButtons() {
+        currentAnswer.text = ""
+        
+        for button in activatedButtons {
+            button.isEnabled = true
+        }
+        
+        activatedButtons.removeAll()
     }
 }
 
