@@ -83,7 +83,7 @@ class ViewController: UIViewController {
         clear.addTarget(self, action: #selector(clearTapped), for: .touchUpInside)
         view.addSubview(clear)
         
-        let buttonsGrid = createButtonsGrid(rows: 4, columns: 5, spacing: 10.0)
+        let buttonsGrid = createButtonsGrid(rows: 4, columns: 5, spacing: 10.0, configuration: configuration)
         buttonsGrid.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(buttonsGrid)
         
@@ -229,7 +229,7 @@ class ViewController: UIViewController {
         }
     }
     
-    func createButtonsGrid(rows: Int, columns: Int, spacing: CGFloat) -> UIStackView {
+    func createButtonsGrid(rows: Int, columns: Int, spacing: CGFloat, configuration: UIButton.Configuration) -> UIStackView {
         let verticalStack = UIStackView()
         verticalStack.axis = .vertical
         verticalStack.alignment = .fill
@@ -244,7 +244,7 @@ class ViewController: UIViewController {
             horizontalStack.spacing = 10
             
             for _ in 0..<columns {
-                let letterButton = UIButton(type: .system)
+                let letterButton = UIButton(configuration: configuration, primaryAction: nil)
                 letterButton.setTitle("WWW", for: .normal)
                 letterButton.layer.borderWidth = 1
                 letterButton.layer.cornerRadius = 5
