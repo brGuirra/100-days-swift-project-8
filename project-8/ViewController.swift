@@ -125,7 +125,11 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        loadLevel()
+        DispatchQueue.global(qos: .userInitiated).async {
+            [weak self] in
+            
+            self?.loadLevel()
+        }
     }
 
     func loadLevel() {
@@ -164,17 +168,23 @@ class ViewController: UIViewController {
             }
         }
         
-        // Removes the line breaks of clue and answer
-        cluesLabel.text = clueString.trimmingCharacters(in: .whitespacesAndNewlines)
-        answersLabel.text = solutionString.trimmingCharacters(in: .whitespacesAndNewlines)
-        
-        // Suffle the bits and sets each one as title of
-        // a button
-        letterBits.shuffle()
-        
-        if letterButtons.count == letterBits.count {
-            for i in 0..<letterButtons.count {
-                letterButtons[i].setTitle(letterBits[i], for: .normal)
+        DispatchQueue.main.async {
+            [weak self] in
+            
+            // Removes the line breaks of clue and answer
+            self?.cluesLabel.text = clueString.trimmingCharacters(in: .whitespacesAndNewlines)
+            self?.answersLabel.text = solutionString.trimmingCharacters(in: .whitespacesAndNewlines)
+            
+            // Suffle the bits and sets each one as title of
+            // a button
+            letterBits.shuffle()
+            
+            if self?.letterButtons.count == letterBits.count {
+                if let letterButtonsCount = self?.letterButtons.count {
+                    for i in 0..<letterButtonsCount {
+                        self?.letterButtons[i].setTitle(letterBits[i], for: .normal)
+                    }
+                }
             }
         }
     
